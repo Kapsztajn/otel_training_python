@@ -1,3 +1,6 @@
+import warnings
+warnings.simplefilter("ignore", DeprecationWarning)
+
 import json
 import logging
 import random
