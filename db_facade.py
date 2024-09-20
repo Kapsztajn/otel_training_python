@@ -86,7 +86,7 @@ def insert_room(data):
     room_id = data.get('id', str(uuid.uuid4()))
     floor = data.get('floor', random.randint(0, 10))
     price = data.get('price', random.randint(100, 1000))
-    building = data.get('area', random.randint(0, 10))
+    building = data.get('building', random.randint(0, 10))
 
     insert = ("INSERT INTO rooms (room_no, room_id, floor, price, building) "
               "VALUES (%s, %s, %s, %s, %s)")
