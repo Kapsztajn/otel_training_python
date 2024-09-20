@@ -120,17 +120,20 @@ def insert_reservation(data):
 
 
 def get_item(table_name, identifier, item_id, transformer):
-    connection = psycopg2.connect(database="otel_training", user="admin", password="pass", host="localhost", port=5432)
-    cursor = connection.cursor()
-    cursor.execute(f"SELECT * from {table_name} where {identifier} = '{item_id}';")
+    with tracer.start_as_current_span("postgres-query"):
+        conn = psycopg2.connect(database="otel_training", user="admin", password="root", host="localhost", port=5432)
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT * from {table_name} where {identifier} = '{item_id}';")
 
-    result = []
-    fetchall = cursor.fetchall()
-    for item in fetchall:
-        result.append(
-            transformer(item)
-        )
-    if result:
-        return json.dumps({'results': result})
-    else:
-        return json.dumps({'results': 'empty'})
+        result = []
+        fetchall = cursor.fetchall()
+        for item in fetchall:
+            result.append(
+                transformer(item)
+            )
+        if result:
+            trace.get_current_span().set_status(trace.Status(trace.StatusCode.OK))
+            return json.dumps({'results': result})
+        else:
+            trace.get_current_span().set_status(trace.Status(trace.StatusCode.ERROR))
+            return json.dumps({'results': 'empty'})
