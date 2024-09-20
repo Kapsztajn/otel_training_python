@@ -11,6 +11,7 @@ urls = (
     '/all_rooms', 'all_rooms',
     '/all_reservations', 'all_reservations',
     '/all_users', 'all_users',
+
     # get particular
     '/rooms/(.*)', 'get_room',
     '/reservations/(.*)', 'get_reservation',

@@ -41,7 +41,7 @@ class DateTimeEncoder(json.JSONEncoder):
 
 
 def get_all(table_name, transformer):
-    connection = psycopg2.connect(database="otel_training", user="admin", password="pass", host="localhost", port=5432)
+    connection = psycopg2.connect(database="otel_training", user="admin", password="root", host="localhost", port=5432)
     cursor = connection.cursor()
     cursor.execute(f"SELECT * from {table_name};")
 
@@ -70,7 +70,7 @@ def insert_user(data):
 
     insert = ("INSERT INTO users (user_id, email, first_name, last_name) "
               "VALUES (%s, %s, %s, %s)")
-    connection = psycopg2.connect(database="otel_training", user="admin", password="pass", host="localhost", port=5432)
+    connection = psycopg2.connect(database="otel_training", user="admin", password="root", host="10.123.119.143", port=5432)
 
     try:
         cursor = connection.cursor()
@@ -93,7 +93,7 @@ def insert_room(data):
 
     insert = ("INSERT INTO rooms (room_no, room_id, floor, price, building) "
               "VALUES (%s, %s, %s, %s, %s)")
-    connection = psycopg2.connect(database="otel_training", user="admin", password="pass", host="localhost", port=5432)
+    connection = psycopg2.connect(database="otel_training", user="admin", password="pass", host="10.123.119.143", port=5432)
 
     try:
         cursor = connection.cursor()
