@@ -1,7 +1,6 @@
 import json
 
 import web
-import xml.etree.ElementTree as ET
 
 import db_facade
 import transformers
