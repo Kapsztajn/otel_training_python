@@ -5,6 +5,18 @@ import web
 import db_facade
 import transformers
 
+from opentelemetry import trace
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+
+otlp_exporter = OTLPSpanExporter(endpoint="localhost:4317", insecure=True)
+
+trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "reservations-system"})))
+trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(otlp_exporter))
+tracer = trace.get_tracer(__name__)
+
 urls = (
     # get all
     '/all_rooms', 'all_rooms',
@@ -27,7 +39,8 @@ app = web.application(urls, globals())
 
 class all_rooms:
     def GET(self):
-        return db_facade.get_all('rooms', transformers.roomer)
+        with tracer.start_span(name='test span'):
+            return db_facade.get_all('rooms', transformers.roomer)
 
 
 class all_reservations:

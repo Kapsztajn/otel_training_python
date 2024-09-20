@@ -7,17 +7,6 @@ from datetime import datetime
 import psycopg2
 
 from psycopg2 import connect
-from opentelemetry import trace
-from opentelemetry.sdk.resources import Resource
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
-
-otlp_exporter = OTLPSpanExporter(endpoint="localhost:4317", insecure=True)
-
-trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "db-facade-proto"})))
-trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(otlp_exporter))
-tracer = trace.get_tracer(__name__)
 
 logger = logging.getLogger(__name__)
 
@@ -30,14 +19,12 @@ class DateTimeEncoder(json.JSONEncoder):
 
 
 def get_all(table_name, transformer):
-    with tracer.start_as_current_span("postgres-query"):
         conn = connect(database="otel_training", user="admin", password="root", host="localhost", port=5432)
         cursor = conn.cursor()
         cursor.execute(f"SELECT * from {table_name};")
         result = []
         fetchall = cursor.fetchall()
         for item in fetchall:
-            trace.get_current_span().add_event(name='transforming', attributes={'table_name': table_name, 'item': item})
             result.append(
                 transformer(item)
             )
@@ -115,7 +102,6 @@ def insert_reservation(data):
 
 
 def get_item(table_name, identifier, item_id, transformer):
-    with tracer.start_as_current_span("postgres-query"):
         conn = psycopg2.connect(database="otel_training", user="admin", password="root", host="localhost", port=5432)
         cursor = conn.cursor()
         cursor.execute(f"SELECT * from {table_name} where {identifier} = '{item_id}';")
@@ -127,8 +113,6 @@ def get_item(table_name, identifier, item_id, transformer):
                 transformer(item)
             )
         if result:
-            trace.get_current_span().set_status(trace.Status(trace.StatusCode.OK))
             return json.dumps({'results': result})
         else:
-            trace.get_current_span().set_status(trace.Status(trace.StatusCode.ERROR))
             return json.dumps({'results': 'empty'})
