@@ -4,11 +4,7 @@ import random
 import uuid
 from datetime import datetime
 
-import warnings
-
 import psycopg2
-
-warnings.filterwarnings("ignore", message=".*Since v1.35, the Jaeger supports OTLP natively.*", category=DeprecationWarning)
 
 from psycopg2 import connect
 from opentelemetry import trace
@@ -49,7 +45,6 @@ def get_all(table_name, transformer):
             return json.dumps({'results': result})
         else:
             return json.dumps({'results': 'empty'})
-
 
 
 def insert_user(data):
