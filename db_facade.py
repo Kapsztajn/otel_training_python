@@ -1,36 +1,29 @@
-import warnings
-warnings.simplefilter("ignore", DeprecationWarning)
-
 import json
 import logging
 import random
 import uuid
 from datetime import datetime
 
+import warnings
+
 import psycopg2
+
+warnings.filterwarnings("ignore", message=".*Since v1.35, the Jaeger supports OTLP natively.*", category=DeprecationWarning)
+
+from psycopg2 import connect
 from opentelemetry import trace
-from opentelemetry.exporter.jaeger.thrift import JaegerExporter
-from opentelemetry.instrumentation.psycopg2 import Psycopg2Instrumentor
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 
-logger = logging.getLogger(__name__)
+otlp_exporter = OTLPSpanExporter(endpoint="localhost:4317", insecure=True)
 
-jaeger_exporter = JaegerExporter(
-    agent_host_name="localhost",  # Jaeger agent host
-    agent_port=6831,  # Jaeger agent port for UDP
-)
-
-resource = Resource(attributes={"service.name": "db_facade"})  # Name of your service
-provider = TracerProvider(resource=resource)
-span_processor = BatchSpanProcessor(jaeger_exporter)
-provider.add_span_processor(span_processor)
-trace.set_tracer_provider(provider)
-
+trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "db-facade-proto"})))
+trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(otlp_exporter))
 tracer = trace.get_tracer(__name__)
 
-Psycopg2Instrumentor().instrument()
+logger = logging.getLogger(__name__)
 
 
 class DateTimeEncoder(json.JSONEncoder):
@@ -41,24 +34,22 @@ class DateTimeEncoder(json.JSONEncoder):
 
 
 def get_all(table_name, transformer):
-    connection = psycopg2.connect(database="otel_training", user="admin", password="root", host="localhost", port=5432)
-    cursor = connection.cursor()
-    cursor.execute(f"SELECT * from {table_name};")
+    with tracer.start_as_current_span("postgres-query"):
+        conn = connect(database="otel_training", user="admin", password="root", host="localhost", port=5432)
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT * from {table_name};")
+        result = []
+        fetchall = cursor.fetchall()
+        for item in fetchall:
+            trace.get_current_span().add_event(name='transforming', attributes={'table_name': table_name, 'item': item})
+            result.append(
+                transformer(item)
+            )
+        if result:
+            return json.dumps({'results': result})
+        else:
+            return json.dumps({'results': 'empty'})
 
-    result = []
-    fetchall = cursor.fetchall()
-    for item in fetchall:
-        result.append(
-            transformer(item)
-        )
-    if result:
-        return json.dumps({'results': result})
-    else:
-        return json.dumps({'results': 'empty'})
-
-
-def handle_null(value, default):
-    return value if value else default
 
 
 def insert_user(data):

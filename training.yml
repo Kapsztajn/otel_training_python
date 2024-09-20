@@ -5,6 +5,7 @@ services:
     container_name: jaeger
     environment:
       - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+      - COLLECTOR_OTLP_ENABLED=true
     ports:
       - "6831:6831/udp"
       - "6832:6832/udp"
@@ -16,6 +17,7 @@ services:
       - "14268:14268"
       - "14269:14269"
       - "9411:9411"
+      - "4317:4317"
     restart: always
   postgres:
     container_name: container-pg
