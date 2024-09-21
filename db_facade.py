@@ -2,20 +2,12 @@ import json
 import logging
 import random
 import uuid
-from datetime import datetime
 
 import psycopg2
 
 from psycopg2 import connect
 
 logger = logging.getLogger(__name__)
-
-
-class DateTimeEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, datetime):
-            return obj.strftime('%Y-%m-%d %H:%M:%S')
-        return super().default(obj)
 
 
 def get_all(table_name, transformer):
