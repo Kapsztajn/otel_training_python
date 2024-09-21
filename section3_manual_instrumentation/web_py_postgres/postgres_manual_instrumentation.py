@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import random
+import time
 import uuid
 
 import psycopg2
@@ -90,21 +91,28 @@ def insert_user(data):
 
         insert = ("INSERT INTO users (user_id, email, first_name, last_name) "
                   "VALUES (%s, %s, %s, %s)")
-        trace.get_current_span().add_event(name='get connection')
+        start_time = round(time.time() * 1000)
         connection = psycopg2.connect(database="otel_training", user="admin", password="root", host="localhost", port=5432)
-        trace.get_current_span().add_event(name='get cursor')
+        trace.get_current_span().set_attribute('get connection took', round(time.time() * 1000) - start_time)
 
         try:
+            start_time = round(time.time() * 1000)
             cursor = connection.cursor()
-            trace.get_current_span().add_event(name='execute sql')
+            trace.get_current_span().set_attribute('get cursor took', round(time.time() * 1000) - start_time)
+
+            start_time = round(time.time() * 1000)
             cursor.execute(insert, (user_id, email, first_name, last_name))
-            trace.get_current_span().add_event(name='commit')
+            trace.get_current_span().set_attribute('execute sql', round(time.time() * 1000) - start_time)
+
+            start_time = round(time.time() * 1000)
             connection.commit()
-            trace.get_current_span().add_event(name='close connection')
+            trace.get_current_span().set_attribute('execute sql', round(time.time() * 1000) - start_time)
+
+            start_time = round(time.time() * 1000)
+
+            trace.get_current_span().set_attribute('close connection', round(time.time() * 1000) - start_time)
             connection.close()
 
-            trace.get_current_span().set_attribute('set attribute', 'example')
-            trace.get_current_span().add_event(name='insert', attributes={'add insert event': user_id})
             trace.get_current_span().set_status(trace.Status(trace.StatusCode.OK), "hurra! ")
             return json.dumps({'user_id': user_id})
         except Exception as e:
