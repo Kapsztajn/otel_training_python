@@ -90,12 +90,17 @@ def insert_user(data):
 
         insert = ("INSERT INTO users (user_id, email, first_name, last_name) "
                   "VALUES (%s, %s, %s, %s)")
+        trace.get_current_span().add_event(name='get connection')
         connection = psycopg2.connect(database="otel_training", user="admin", password="root", host="localhost", port=5432)
+        trace.get_current_span().add_event(name='get cursor')
 
         try:
             cursor = connection.cursor()
+            trace.get_current_span().add_event(name='execute sql')
             cursor.execute(insert, (user_id, email, first_name, last_name))
+            trace.get_current_span().add_event(name='commit')
             connection.commit()
+            trace.get_current_span().add_event(name='close connection')
             connection.close()
 
             trace.get_current_span().set_attribute('set attribute', 'example')
