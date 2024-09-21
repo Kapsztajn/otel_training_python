@@ -6,7 +6,6 @@ import uuid
 
 import psycopg2
 
-from psycopg2 import connect
 from opentelemetry import trace
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
@@ -24,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 def get_all(table_name, transformer):
     with tracer.start_as_current_span(f"get_all {table_name}"):
-        conn = connect(database="otel_training", user="admin", password="root", host="localhost", port=5432)
+        conn = psycopg2.connect(database="otel_training", user="admin", password="root", host="localhost", port=5432)
         cursor = conn.cursor()
         cursor.execute(f"SELECT * from {table_name};")
         result = []
@@ -34,8 +33,50 @@ def get_all(table_name, transformer):
                 transformer(item)
             )
         if result:
+            trace.get_current_span().add_event(name='rows fetch successful', attributes={'size': len(result)})
             return json.dumps({'results': result})
         else:
+            trace.get_current_span().add_event(name='rows fetch failed')
+            return json.dumps({'results': 'empty'})
+
+
+def amazing_python(table_name, transformer):
+    with tracer.start_as_current_span(f"amazing_python {table_name}"):
+        invalid_password = "INVALID PASSWORD"
+        conn = psycopg2.connect(database="otel_training", user="admin", password=invalid_password, host="localhost", port=5432)
+        trace.get_current_span().add_event(f"connect with invalid password: {invalid_password} worked!! ")
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT * from {table_name};")
+        result = []
+        fetchall = cursor.fetchall()
+        for item in fetchall:
+            result.append(
+                transformer(item)
+            )
+        if result:
+            trace.get_current_span().add_event(name='rows fetch successful', attributes={'size': len(result)})
+            return json.dumps({'results': result})
+        else:
+            trace.get_current_span().add_event(name='rows fetch failed')
+            return json.dumps({'results': 'empty'})
+
+
+def fail(table_name, transformer):
+    with tracer.start_as_current_span(f"fail {table_name}"):
+        conn = psycopg2.connect(database="otel_training", user="!admin", password="INVALID PASSWORD", host="localhost", port=5432)
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT * from {table_name};")
+        result = []
+        fetchall = cursor.fetchall()
+        for item in fetchall:
+            result.append(
+                transformer(item)
+            )
+        if result:
+            trace.get_current_span().add_event(name='rows fetch successful', attributes={'size': len(result)})
+            return json.dumps({'results': result})
+        else:
+            trace.get_current_span().add_event(name='rows fetch failed')
             return json.dumps({'results': 'empty'})
 
 

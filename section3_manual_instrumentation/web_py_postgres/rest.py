@@ -19,7 +19,11 @@ urls = (
     # post/add particular
     '/add_room', 'add_room',
     '/add_reservation', 'add_reservation',
-    '/add_user', 'add_user'
+    '/add_user', 'add_user',
+
+    # get fail
+    '/fail', 'fail',
+    '/amazing_python', 'amazing_python'
 )
 
 app = web.application(urls, globals())
@@ -47,7 +51,8 @@ class get_room:
 
 class get_reservation:
     def GET(self, item_id):
-        return postgres_manual_instrumentation.get_item('reservations', 'reservation_id', item_id, transformers.reservator)
+        return postgres_manual_instrumentation.get_item('reservations', 'reservation_id', item_id,
+                                                        transformers.reservator)
 
 
 class get_user:
@@ -71,6 +76,16 @@ class add_user:
     def POST(self):
         data = json.loads(web.data().decode('utf-8'))
         return postgres_manual_instrumentation.insert_user(data)
+
+
+class fail:
+    def GET(self):
+        return postgres_manual_instrumentation.fail('users', transformers.useror)
+
+
+class amazing_python:
+    def GET(self):
+        return postgres_manual_instrumentation.amazing_python('users', transformers.useror)
 
 
 if __name__ == "__main__":
