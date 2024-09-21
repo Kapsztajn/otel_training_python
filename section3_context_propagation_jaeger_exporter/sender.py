@@ -4,11 +4,12 @@ from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.propagate import inject
+from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 
 # Set up the OpenTelemetry Tracer Provider
-trace.set_tracer_provider(TracerProvider())
+trace.set_tracer_provider(TracerProvider(resource=Resource(attributes={"service.name": "context-propagation"})))
 tracer = trace.get_tracer(__name__)
 
 # Export traces to the jaeger
