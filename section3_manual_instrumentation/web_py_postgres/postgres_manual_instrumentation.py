@@ -59,6 +59,7 @@ def insert_user(data):
 
             return json.dumps({'user_id': user_id})
         except Exception as e:
+            trace.get_current_span().record_exception(e)
             logger.error(f"Error inserting data: {str(e)}")
             return json.dumps({'exception': {str(e)}})
 
@@ -83,6 +84,7 @@ def insert_room(data):
 
             return json.dumps({'room_id': room_id})
         except Exception as e:
+            trace.get_current_span().record_exception(e)
             logger.error(f"Error inserting data: {str(e)}")
             return json.dumps({'exception': {str(e)}})
 
@@ -105,6 +107,7 @@ def insert_reservation(data):
 
             return json.dumps({'reservation_id': reservation_id})
         except Exception as e:
+            trace.get_current_span().record_exception(e)
             logger.error(f"Error inserting data: {str(e)}")
             return json.dumps({'exception': {str(e)}})
 
