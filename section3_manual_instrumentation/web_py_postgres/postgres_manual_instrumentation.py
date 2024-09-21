@@ -98,9 +98,13 @@ def insert_user(data):
             connection.commit()
             connection.close()
 
+            trace.get_current_span().set_attribute('set attribute', 'example')
+            trace.get_current_span().add_event(name='insert', attributes={'add insert event': user_id})
+            trace.get_current_span().set_status(trace.Status(trace.StatusCode.OK), "hurra! ")
             return json.dumps({'user_id': user_id})
         except Exception as e:
             trace.get_current_span().record_exception(e)
+            trace.get_current_span().set_status(trace.Status(trace.StatusCode.ERROR), "damn... ")
             logger.error(f"Error inserting data: {str(e)}")
             return json.dumps({'exception': {str(e)}})
 
