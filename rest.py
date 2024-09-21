@@ -1,21 +1,23 @@
 import json
-
 import web
-
-import db_facade
-import transformers
+import logging
 
 from opentelemetry import trace
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 
 otlp_exporter = OTLPSpanExporter(endpoint="localhost:4317", insecure=True)
 
-trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "reservations-system"})))
+trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "db-facade-prot2o"})))
 trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(otlp_exporter))
 tracer = trace.get_tracer(__name__)
+
+logger = logging.getLogger(__name__)
+
+import db_facade
+import transformers
 
 urls = (
     # get all
@@ -39,7 +41,7 @@ app = web.application(urls, globals())
 
 class all_rooms:
     def GET(self):
-        with tracer.start_span(name='test span'):
+        with tracer.start_as_current_span("test"):
             return db_facade.get_all('rooms', transformers.roomer)
 
 
