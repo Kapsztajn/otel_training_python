@@ -1,0 +1,3 @@
+Place the prometheus.yml and otel-collector-config.yaml in the same directory as the docker-compose.yml.
+Run docker-compose up, and access Prometheus at http://localhost:9090.
+These setups will enable you to visualize
