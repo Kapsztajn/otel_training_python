@@ -17,7 +17,6 @@ services:
       - "14268:14268"
       - "14269:14269"
       - "9411:9411"
-      - "4317:4317"
     restart: always
   postgres:
     container_name: container-pg
