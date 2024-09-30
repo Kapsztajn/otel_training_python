@@ -1,23 +1,39 @@
 import logging
-from opentelemetry import logs
-from opentelemetry.sdk.logs import LoggerProvider, ConsoleLogExporter, SimpleLogRecordProcessor
+import os
 
-# Set up the logging provider
-logs.set_logger_provider(LoggerProvider())
-logger = logs.get_logger(__name__)
+from opentelemetry.sdk._logs import LoggingHandler, LoggerProvider
+from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
+from opentelemetry.exporter.otlp.proto.grpc._log_exporter import (
+    OTLPLogExporter,
+)
+from opentelemetry.sdk.resources import Resource
 
-# Export logs to the console
-log_exporter = ConsoleLogExporter()
-log_processor = SimpleLogRecordProcessor(log_exporter)
-logs.get_logger_provider().add_log_record_processor(log_processor)
+# Define a resource (to identify your service in traces)
+resource = Resource.create(attributes={"service.name": os.path.basename(__file__)})
 
-# Set up the Python standard logging integration
+# Create a LoggerProvider with the resource
+logger_provider = LoggerProvider(resource=resource)
+
+# Create an OTLP exporter (logs are sent to a collector running on localhost:4317 by default)
+otlp_log_exporter = OTLPLogExporter()
+
+# Add a BatchLogRecordProcessor to handle batch exporting of logs
+logger_provider.add_log_record_processor(BatchLogRecordProcessor(otlp_log_exporter))
+
+# Integrate the Python logging module with OpenTelemetry
+logging_handler = LoggingHandler(level=logging.INFO, logger_provider=logger_provider)
+
+# Set up the Python logging module to use the OpenTelemetry handler
 logging.basicConfig(level=logging.INFO)
-py_logger = logging.getLogger(__name__)
+logging.getLogger().addHandler(logging_handler)
 
-# Create log entries
-py_logger.info("This is an info log message.")
-py_logger.error("This is an error log message.")
+# Example logger
+logger = logging.getLogger(__name__)
 
-logger.info("Custom OpenTelemetry log message.")
-logger.error("Custom OpenTelemetry error log.")
+# Log some test messages
+logger.info("OpenTelemetry logging is working!")
+logger.error("This is an error message")
+logger.warning("This is a warning message")
+
+# Ensure that logs are flushed before program exit
+logger_provider.shutdown()

@@ -1,3 +1,5 @@
+import os
+
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor, ConsoleSpanExporter
@@ -8,7 +10,7 @@ import threading
 
 # Define resources (optional: specify service details like name and version)
 resource = Resource(attributes={
-    "service.name": "my-python-service",
+    "service.name": os.path.basename(__file__),
     "service.version": "1.0.0"
 })
 

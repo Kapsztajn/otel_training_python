@@ -23,14 +23,14 @@ processing_time_histogram = meter.create_histogram(
     unit="ms",
 )
 
-# Register Prometheus Exporter for metrics
+# Register Prometheus Exporter for prometheus_metrics
 prometheus_exporter = PrometheusMetricReader()
 metrics.get_meter_provider().add_metric_reader(prometheus_exporter)
 
-# Start Prometheus HTTP server to expose the metrics
-start_http_server(8000)  # Prometheus will scrape metrics from http://localhost:8000
+# Start Prometheus HTTP server to expose the prometheus_metrics
+start_http_server(8000)  # Prometheus will scrape prometheus_metrics from http://localhost:8000
 
-# Function to simulate item processing and record metrics
+# Function to simulate item processing and record prometheus_metrics
 def process_items():
     for i in range(10):
         # Simulate processing time
@@ -46,5 +46,5 @@ def process_items():
         print(f"Processed item {i + 1}, Processing time: {processing_time}ms")
 
 if __name__ == "__main__":
-    print("Processing items and exposing metrics at http://localhost:8000/metrics")
+    print("Processing items and exposing prometheus_metrics at http://localhost:8000/metrics")
     process_items()

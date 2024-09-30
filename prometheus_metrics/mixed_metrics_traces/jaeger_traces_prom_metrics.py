@@ -1,16 +1,16 @@
-import os
 import time
 from opentelemetry import trace, metrics
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
 from opentelemetry.exporter.prometheus import PrometheusMetricReader
 from prometheus_client import start_http_server
 from opentelemetry.exporter.jaeger.thrift import JaegerExporter
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 # 1. Set up resource that applies to both metrics and traces
-resource = Resource.create(attributes={"service.name": os.path.basename(__file__)})
+resource = Resource.create(attributes={"service.name": "my-service"})
 
 ### TRACING SETUP ###
 
@@ -56,7 +56,7 @@ request_latency_histogram = meter.create_histogram(
 ### SIMULATE TRACING AND METRICS ###
 
 def simulate_requests():
-    for i in range(10):
+    for i in range(100):
         with tracer.start_as_current_span("http_request"):
             # Increment the request counter
             request_counter.add(1, attributes={"endpoint": "/api/v1/resource"})

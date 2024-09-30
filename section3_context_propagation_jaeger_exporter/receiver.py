@@ -1,4 +1,6 @@
 # script_b.py
+import os
+
 from flask import Flask, request
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
@@ -8,7 +10,7 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 
 # Set up the OpenTelemetry Tracer Provider
-trace.set_tracer_provider(TracerProvider(resource=Resource(attributes={"service.name": "context-propagation"})))
+trace.set_tracer_provider(TracerProvider(resource=Resource(attributes={"service.name": os.path.basename(__file__)})))
 tracer = trace.get_tracer(__name__)
 
 # Export traces to the jaeger
