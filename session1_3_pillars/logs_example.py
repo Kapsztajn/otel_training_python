@@ -1,4 +1,5 @@
 import logging
+import os
 
 from opentelemetry.sdk._logs import LoggingHandler, LoggerProvider
 from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
@@ -8,7 +9,7 @@ from opentelemetry.exporter.otlp.proto.grpc._log_exporter import (
 from opentelemetry.sdk.resources import Resource
 
 # Define a resource (to identify your service in traces)
-resource = Resource.create(attributes={"service.name": "my-python-service"})
+resource = Resource.create(attributes={"service.name": os.path.basename(__file__)})
 
 # Create a LoggerProvider with the resource
 logger_provider = LoggerProvider(resource=resource)

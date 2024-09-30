@@ -1,3 +1,4 @@
+import os
 import time
 from opentelemetry import trace, metrics
 from opentelemetry.sdk.trace import TracerProvider
@@ -9,7 +10,7 @@ from opentelemetry.exporter.jaeger.thrift import JaegerExporter
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 # 1. Set up resource that applies to both metrics and traces
-resource = Resource.create(attributes={"service.name": "my-service"})
+resource = Resource.create(attributes={"service.name": os.path.basename(__file__)})
 
 ### TRACING SETUP ###
 

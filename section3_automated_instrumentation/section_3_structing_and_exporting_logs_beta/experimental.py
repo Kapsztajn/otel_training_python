@@ -11,7 +11,7 @@ from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 
 # Set up the OpenTelemetry Tracer Provider
 trace.set_tracer_provider(
-    TracerProvider(resource=Resource.create({"service.name": "my-service"}))
+    TracerProvider(resource=Resource.create({"service.name": os.path.basename(__file__)}))
 )
 tracer = trace.get_tracer(__name__)
 
