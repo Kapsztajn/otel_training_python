@@ -1,0 +1,26 @@
+psycopg2_binary==2.9.9
+web.py==0.6.2
+
+#brew install postgresql
+#pip3 install psycopg2
+
+# 404  sudo find / -name EXTERNALLY-MANAGED
+# 405  rm /usr/local/Cellar/python@3.12/3.12.6/Frameworks/Python.framework/Versions/3.12/lib/python3.12/EXTERNALLY-MANAGED
+
+#otel
+opentelemetry-api
+opentelemetry-api
+opentelemetry-exporter-jaeger
+opentelemetry-exporter-jaeger-proto-grpc
+opentelemetry-exporter-jaeger-thrift
+
+opentelemetry-exporter-otlp
+opentelemetry-exporter-otlp-proto-common
+opentelemetry-exporter-otlp-proto-common
+opentelemetry-exporter-otlp-proto-grpc
+opentelemetry-exporter-otlp-proto-http
+opentelemetry-instrumentation
+opentelemetry-instrumentation-dbapi
+opentelemetry-instrumentation-psycopg2
+opentelemetry-proto
+opentelemetry-sdk
