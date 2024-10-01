@@ -41,14 +41,21 @@ try:
     cursor = connection.cursor()
 
     # Example SQL query (Psycopg2Instrumentor will automatically instrument this)
-    query = "SELECT * FROM rooms;"
-
+    query = "SELECT * FROM users;"
     cursor.execute(query)
-
-    # Fetch results
     records = cursor.fetchall()
+    for record in records:
+        logger.info(f"Record: {record}")
 
-    # Log results
+    query = "SELECT * FROM rooms;"
+    cursor.execute(query)
+    records = cursor.fetchall()
+    for record in records:
+        logger.info(f"Record: {record}")
+
+    query = "SELECT * FROM reservations;"
+    cursor.execute(query)
+    records = cursor.fetchall()
     for record in records:
         logger.info(f"Record: {record}")
 

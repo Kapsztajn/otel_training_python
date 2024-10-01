@@ -9,7 +9,7 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 # Setup OpenTelemetry Tracing with Jaeger and OTLP
-resource = Resource(attributes={"service.name": "flask-service"})
+resource = Resource(attributes={"service.name": os.path.basename(__file__)})
 trace.set_tracer_provider(TracerProvider(resource=resource))
 
 # OTLP exporter configuration

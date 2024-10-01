@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# pgamin: localhost:5050
+# user: admin@admin.com
+# pass: root
+#
+# db: otel
+# admin
+# pass: root
+
+#docker-compose -f automated-postgres.yml up -d
