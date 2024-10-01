@@ -1,0 +1,23 @@
+Sekcja 1. Wprowadzenie
+
+1. Przeglad
+2. Wprowadzenie
+3. Przypadki Uzycia
+4. Pauza - 15min
+
+Sekcja 2. Konfiguracja OpenTelemetry
+5. Przeglad SDK
+6. Przeglad backedow
+7. Instalacja SDK [cwiczenie]
+
+Sekcja 3. Insturmentacja z OpenTelemetry
+8. Automatyczna instrumentacja
+9. Reczna instrumentacja
+10. Propagacja kontekstu
+11. Instalacja SDK [cwiczenie]
+
+Sekcja 4. Zbieranie i Export danych
+12. Przeglad Exporterow
+13. Collector
+
+Sekcja 5. Podsumowanie Q&A
