@@ -56,7 +56,7 @@ request_latency_histogram = meter.create_histogram(
 ### SIMULATE TRACING AND METRICS ###
 
 def simulate_requests():
-    for i in range(10):
+    for i in range(1000):
         with tracer.start_as_current_span("http_request"):
             # Increment the request counter
             request_counter.add(1, attributes={"endpoint": "/api/v1/resource"})
