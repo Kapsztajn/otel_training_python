@@ -1,0 +1,95 @@
+Dzień 1: Wprowadzenie, Konfiguracja i Instrumentacja
+
+Sesja 1: Wprowadzenie do Obserwowalności i OpenTelemetry (1 Godzina)
+● Przegląd Obserwowalności
+    ○ Trzy filary obserwowalności: Ślady, Metryki, Logi.
+● Wprowadzenie do OpenTelemetry
+    ○ Czym jest OpenTelemetry?
+    ○ Znaczenie obserwowalności we współczesnych systemach programistycznych.
+    ○ Kluczowe API
+    ○ Kluczowe komponenty: API, SDK, Collector, Exporter.
+    ○ Architektura OpenTelemetry i jego rola w obserwowalności.
+● Przypadki Użycia OpenTelemetry
+    ○ Scenariusze z życia wzięte, w których OpenTelemetry jest niezbędne. Przerwa: 15 minut
+
+Sesja 2: Konfiguracja OpenTelemetry (1.5 Godziny)
+● Instalacja i Konfiguracja
+    ○ Przegląd dostępnych SDK OpenTelemetry (Python, Java).
+    ○ Instalacja SDK OpenTelemetry dla wybranego języka programowania.
+Co do czego? Jaeger, Prom, Kibana etc co do logow, co do metyrk
+    ○ Konfiguracja OpenTelemetry Collector.
+● Praktyczne Ćwiczenie: Konfiguracja OpenTelemetry
+    ○ Uczestnicy instalują SDK i konfigurują prosty OpenTelemetry Collector. Przerwa: 15 mi1 nut
+
+Sesja 3: Instrumentacja z OpenTelemetry (2 Godziny)
+● Automatyczna Instrumentacja
+    ○ Używanie bibliotek automatycznej instrumentacji dla szybkiej konfiguracji. ○ Zalety i ograniczenia.
+● Ręczna Instrumentacja
+    ○ Tworzenie i zarządzanie śladami: Spany i Konteksty.
+    ○ Rejestrowanie niestandardowych metryk. - to test prometheus
+    ○ code examples +
+    ○ metryki
+
+● Propagacja Kontekstu
+    ○ Zrozumienie propagacji kontekstu w rozproszonych systemach.
+● Praktyczne Ćwiczenie: Instrumentacja Prostej Aplikacji
+    ○ Uczestnicy ręcznie instrumentują podstawową aplikację za pomocą śladów, metryk i logów.
+
+Przerwa na Lunch: 1 Godzina
+
+Sesja 4: Zbieranie i Eksport Danych (2 Godziny)
+● Konfiguracja Eksporterów
+    ○ Przegląd popularnych eksporterów (np. Jaeger, Prometheus).
+    ○ Konfiguracja i ustawienia eksporterów dla różnych języków programowania. ● OpenTelemetry Collector [koncept]
+    ○ Głębsze omówienie architektury Collectora.
+    ○ Konfiguracja Collectora do przetwarzania danych.
+● Praktyczne Ćwiczenie: Eksport i Zbieranie Danych
+    ○ Uczestnicy konfigurują swoją aplikację i Collector do eksportu danych do backendu.
+Przerwa: 15 minut
+Sesja 5: Podsumowanie Dnia 1 i Sesja Q&A (30 Minut)
+● Przegląd Kluczowych Pojęć
+    ○ Podsumowanie kluczowych punktów dnia i wyjaśnienie wątpliwości.
+
+● Sesja Q&A
+    ○ Otwarte pytania i odpowiedzi dla uczestników.
+
+
+Dzień 2: Wizualizacja, Tematy Zaawansowane i Praktyczne Ćwiczenia
+
+Sesja 1: Zaawansowane Tematy OpenTelemetry (1.5 Godziny)
+● Optymalizacja Wydajności
+    ○ Minimalizacja obciążenia wynikającego z instrumentacji.
+    ○ Strategie próbkowania dla aplikacji o dużym ruchu.
+● Systemy Rozproszone i OpenTelemetry
+    ○ Implementacja OpenTelemetry w mikrousługach.
+    ○ Śledzenie w systemach rozproszonych.
+● Aspekty Bezpieczeństwa
+    ○ Ochrona danych telemetrycznych.
+    ○ Zgodność z regulacjami i najlepsze praktyki.
+● Praktyczne Ćwiczenie: Implementacja Zaawansowanych Funkcji
+    ○ Uczestnicy konfigurują próbkowanie i ustawienia bezpieczeństwa w swojej konfiguracji OpenTelemetry. ses
+Przerwa na Lunch: 1 Godzina
+
+Sesja 2: Rozwiązywanie Problemów i Analiza (1.5 Godziny)
+● Używanie Danych Telemetrycznych do Analizy Przyczyn Problemów ○ Identyfikacja i diagnozowanie problemów za pomocą śladów, metryk i logów.
+● Typowe Pułapki
+    ○ Wyzwania w implementacji OpenTelemetry i jak ich unikać.
+● Praktyczne Ćwiczenie: Analiza Danych Telemetrycznych
+    ○ Uczestnicy używają zebranych danych do rozwiązywania symulowanego problemu w swojej aplikacji.
+Sesja 3: Wizualizacja Danych Telemetrycznych z Grafaną (1.5 Godziny)
+● Wprowadzenie do Grafany
+    ○ Przegląd Grafany i jej rola w obserwowalności.
+    ○ Konfiguracja Grafany i dodawanie źródeł danych.
+● Tworzenie Dashboardów
+    ○ Tworzenie i personalizacja dashboardów dla metryk.
+    ○ Wizualizacja śladów i logów.
+● Praktyczne Ćwiczenie: Tworzenie Dashboardów w Grafanie
+    ○ Uczestnicy tworzą i konfigurują dashboardy w Grafanie do wizualizacji swoich danych telemetrycznych.
+Przerwa: 15 minut
+Sesja 4: Projekt Końcowy i Zakończenie Szkolenia (2 Godziny)
+● Projekt Końcowy: Implementacja Kompleksowego Rozwiązania Obserwowalności
+    ○ Uczestnicy będą instrumentować bardziej złożoną aplikację, konfigurować OpenTelemetry Collector,
+        eksportować dane do Prometheusa i wizualizować je w Grafanie.
+● Przegląd i Dyskusja
+    ○ Omówienie rozwiązań wdrożonych przez uczestników.
+    ○ Przegląd kluczowych koncepcji z całego szkolenia.
