@@ -16,8 +16,8 @@ services:
     ports:
       - '6831:6831'
       - '16686:16686'
-      - '4318:4318'
-   
+      - '4319:4318'   
+
   hotrod:
     container_name: hotrod
     image: jaegertracing/example-hotrod:1.51
@@ -26,7 +26,7 @@ services:
       - '8083:8083'
     command: ["-m","prometheus","all"]
     environment:
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
     volumes:
       - type: tmpfs
         target: /var/log/app_logs  # Use appropriate log directory
@@ -45,6 +45,8 @@ services:
     image: grafana/loki
     ports:
       - "3100:3100"
+    volumes:
+      - "./loki/config.yaml:/etc/loki/local-config.yaml"
     command: -config.file=/etc/loki/local-config.yaml    
 
   promtail:
@@ -57,3 +59,12 @@ services:
     command: -config.file=/etc/promtail/config.yml
     ports:
       - "9080:9080"
+
+  otel-collector:  # Adding the OpenTelemetry Collector service
+    image: otel/opentelemetry-collector:latest
+    volumes:
+      - ./otel collector/otel-collector-config.yaml:/otel-collector-config.yaml
+    command: ["--config", "/otel-collector-config.yaml"]
+    ports:
+      - "4317:4317"  # gRPC endpoint for OTel Collector
+      - "4318:4318"  # HTTP endpoint for OTel Collector
