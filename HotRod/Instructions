@@ -1,0 +1,6 @@
+hotrod frontend http://localhost:8080/ równolegle z bash z logami z hotrod collector-1
+jaeger  http://localhost:16686/search
+prometheus http://localhost:9090/targets?search=
+grafana http://localhost:3000/login
+w grafanie zakładka explore - np do przeglądania logów
+w grafanie zakłądaka explore -> metrics 
