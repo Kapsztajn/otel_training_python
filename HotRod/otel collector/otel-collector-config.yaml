@@ -13,6 +13,10 @@ receivers:
           static_configs:
             - targets: ['hotrod:8080']  # HotROD app's metrics endpoint
 
+  filelog:
+    include: [/var/lib/docker/containers/c654654a26fda0d0ec5226c9fcf93b2b06af48afd5a5166bf2b5c9388cca1518/*.log]
+    start_at: end
+
 exporters:
   otlp:
     endpoint: "jaeger:4317"  # Pointing to Jaeger for exporting traces
@@ -28,6 +32,8 @@ exporters:
     endpoint: "loki:3100/otlp"
     tls:
       insecure: true
+  loki:
+    endpoint: http://loki:3100/loki/api/v1/push
 
 service:
   pipelines:
@@ -38,5 +44,5 @@ service:
       receivers: [prometheus]
       exporters: [prometheus]
     logs:
-      receivers: [otlp]
-      exporters: [otlphttp]
+      receivers: [filelog]
+      exporters: [loki]

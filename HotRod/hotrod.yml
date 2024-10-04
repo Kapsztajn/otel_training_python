@@ -49,21 +49,13 @@ services:
       - "./loki/config.yaml:/etc/loki/local-config.yaml"
     command: -config.file=/etc/loki/local-config.yaml    
 
-  promtail:
-    container_name: promtail2
-    image: grafana/promtail:2.8.0
+  otel-collector:  # Adding the OpenTelemetry Collector service
+    image: otel/opentelemetry-collector-contrib:latest
     volumes:
+      - ./otel collector/otel-collector-config.yaml:/otel-collector-config.yaml
       - ./promtail/config.yml:/etc/promtail/config.yml
       - /var/log:/var/log
       - /var/lib/docker/containers:/var/lib/docker/containers
-    command: -config.file=/etc/promtail/config.yml
-    ports:
-      - "9080:9080"
-
-  otel-collector:  # Adding the OpenTelemetry Collector service
-    image: otel/opentelemetry-collector:latest
-    volumes:
-      - ./otel collector/otel-collector-config.yaml:/otel-collector-config.yaml
     command: ["--config", "/otel-collector-config.yaml"]
     ports:
       - "4317:4317"  # gRPC endpoint for OTel Collector
