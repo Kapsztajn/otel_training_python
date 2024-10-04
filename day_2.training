@@ -1,4 +1,14 @@
 Sekcja 1. Zaawansowane Tematy OpenTelemetry
++ sampling
++ curle + heath page
+
+setup - schemat - komponent po komponencie
+na co uczulic developera: np zamykanie spanow***, best practices
+adaptacja = nalozenie na instniejacy code base
+3rd party toole, projekty ktore mozna dorzucic
+jeaeger + postgresql
+ja vs devopsi w vero
+miejsca w ktorych nie robimy opentelemetry - na bank
 
 1. Optymalizacja wydajnosci
 2. System Rozproszone

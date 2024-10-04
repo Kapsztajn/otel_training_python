@@ -1,6 +1,14 @@
-hotrod frontend http://localhost:8080/ równolegle z bash z logami z hotrod collector-1
-jaeger  http://localhost:16686/search
-prometheus http://localhost:9090/targets?search=
-grafana http://localhost:3000/login
-w grafanie zakładka explore - np do przeglądania logów
-w grafanie zakłądaka explore -> metrics 
+hotrod frontend http://localhost:8080/
++ docker compose logs
+jaeger:  http://localhost:16686/search
+prometheus: http://localhost:9090/targets?search=
+grafana: http://localhost:3000/login
+- explore data source: -> logs
+- explore data source: -> metrics
+
+add Grafana datasource*
+
+add example alert query
+
+count_over_time({job="hotrod"} |= "error" [5m]) > 10
+
